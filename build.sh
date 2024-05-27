@@ -10,7 +10,14 @@ CHIPSET_NAME=kona
 VARIANT=r8q
 ARCH=arm64
 VERSION=Nethunter_WirusMOD_${VARIANT}_v4.0.1
-
+BOARD_KERNEL_CMDLINE="console=tty1 droidian.lvm.prefer androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=2048 printk.devkmsg=on firmware_class.path=/vendor/firmware_mnt/image"
+MKBOOTIMG_AFLAG="--cmdline \"${BOARD_KERNEL_CMDLINE}\" \
+				--base 0x00000000 --pagesize ${BOARD_KERNEL_PAGESIZE} \
+				--os_version ${PLATFORM_VERSION} --os_patch_level ${PLATFORM_SECURITY_PATCH} \
+				--ramdisk_offset 0x02000000 --tags_offset 0x01E00000 \
+				--dtb dtb.img --header_version 2 \
+				--board SRPSH29C000"
+#*** TARGET CONFIG END ***#
 
 BUILD_CROSS_COMPILE=$DIR/toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 KERNEL_LLVM_BIN=$DIR/toolchain/llvm-arm-toolchain-ship/10.0/bin/clang
