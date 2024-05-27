@@ -34,7 +34,7 @@ CLANG_TRIPLE=aarch64-linux-gnu-
 KERNEL_IMG=$BUILD_KERNEL_OUT_DIR/arch/arm64/boot/Image
 DTB_IMG=$BUILD_KERNEL_OUT_DIR/arch/arm64/boot/dtb.img
 BOARD_KERNEL_PAGESIZE=4096
-BOARD_KERNEL_CMDLINE="console=null androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=2048 printk.devkmsg=on firmware_class.path=/vendor/firmware_mnt/image"
+BOARD_KERNEL_CMDLINE="console=tty1 droidian.lvm.prefer androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=2048 printk.devkmsg=on firmware_class.path=/vendor/firmware_mnt/image"
 MKBOOTIMG_AFLAG="--cmdline \"${BOARD_KERNEL_CMDLINE}\" \
 				--base 0x00000000 --pagesize ${BOARD_KERNEL_PAGESIZE} \
 				--os_version ${PLATFORM_VERSION} --os_patch_level ${PLATFORM_SECURITY_PATCH} \
@@ -44,7 +44,7 @@ MKBOOTIMG_AFLAG="--cmdline \"${BOARD_KERNEL_CMDLINE}\" \
 #*** TARGET CONFIG END ***#
 
 
-KERNEL_DEFCONFIG=vendor/${CHIPSET_NAME}_sec_defconfig
+KERNEL_DEFCONFIG=vendor/wirus_defconfig
 
 if [ "${SEC_BUILD_OPTION_TYPE}" != "user" ]; then
 	DEBUG_DEFCONFIG=vendor/${CHIPSET_NAME}_sec_${SEC_BUILD_OPTION_TYPE}_defconfig
