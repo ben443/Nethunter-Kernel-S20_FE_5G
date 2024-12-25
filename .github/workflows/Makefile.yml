@@ -15,7 +15,7 @@ jobs:
     - name: Build Kernel
       uses: dabao1955/kernel_build_action@main
       with:
-          kernel-url: https://github.com/ben443/Nethunter-Kernel-S20_FE_5G
+          kernel-url: https://github.com/Svirusx/Nethunter-Kernel-S20_FE_5G.git
           #kernel-dir: msm-4.19
           kernel-branch: nethunter-13.0
           config: wirus_defconfig
