@@ -1,0 +1,65 @@
+name: Build Kernel and Boot Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Set up QEMU
+        uses: docker://multiarch/qemu-user-static:latest
+        with:
+          args: --reset -p yes
+
+      - name: Set up APT packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            android-tools-mkbootimg \
+            device-tree-compiler \
+            gcc-aarch64-linux-gnu \
+            abootimg \
+            android-sdk-libsparse-utils \
+            android-tools-adb \
+            android-tools-fastboot \
+            build-essential \
+            git \
+            python3
+
+      - name: Build Kernel and Boot Image
+        run: |
+          # Navigate to the build directory
+          cd devices/qcom/r8q
+
+          # Build the kernel
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- wirus_defconfig
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
+
+          # Copy the built kernel image
+          mkdir -p kernel
+          cp arch/arm64/boot/Image.gz kernel/Image.gz
+
+          # Copy the device tree blob
+          mkdir -p dtb
+          cp arch/arm64/boot/dts/qcom/sm8250-samsung-r8q.dtb dtb/sm8250-samsung-r8q.dtb
+
+          # Create the boot image
+          ./build.sh
+
+      - name: Upload Boot Image Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: boot-img
+          path: devices/qcom/r8q/out/boot.img
